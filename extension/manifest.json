@@ -1,0 +1,22 @@
+{
+  "name": "TradingView Custom Extension",
+  "description": "",
+  "version": "0.1",
+  "manifest_version": 2,
+  "content_scripts": [
+    {
+      "run_at": "document_end",
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "jquery-3.6.0.slim.min.js",
+        "arrive.min.js",
+        "content-script.js"
+      ],
+      "all_frames": false
+    }
+  ],
+  "permissions": []
+}

@@ -1,0 +1,56 @@
+{
+  "name": "tradingview-desktop",
+  "version": "1.0.6",
+  "description": "Unofficial TradingView Desktop Version",
+  "main": "index.js",
+  "license": "MIT",
+  "author": "marketwizards <marketwizards26@gmail.com>",
+  "scripts": {
+    "start": "electron .",
+    "build": "npx electron-builder build"
+  },
+  "build": {
+    "appId": "com.themarketwizards.tradingview-desktop",
+    "productName": "TradingViewTrader",
+    "extraResources": [
+      {
+        "from": "extension",
+        "to": "extension"
+      }
+    ],
+    "mac": {
+      "identity": null,
+      "icon": "assets/icons/tradingview.icns",
+      "category": "public.app-category.finance",
+      "target": [
+        "dmg"
+      ],
+      "artifactName": "${productName}-${version}-${platform}.${ext}"
+    },
+    "linux": {
+      "icon": "assets/icons/tradingview.png",
+      "category": "Finance",
+      "target": [
+        "zip"
+      ],
+      "artifactName": "${productName}-${version}-${platform}-${arch}.${ext}"
+    },
+    "win": {
+      "icon": "assets/icons/tradingview.ico",
+      "publisherName": "themarketwizards",
+      "target": [
+        "zip"
+      ],
+      "artifactName": "${productName}-${version}-${platform}-${arch}.${ext}"
+    }
+  },
+  "devDependencies": {
+    "electron": "^13.1.7",
+    "electron-builder": "^22.11.7"
+  },
+  "dependencies": {
+    "electron-is-dev": "^2.0.0",
+    "electron-log": "^4.4.1",
+    "electron-window-state": "^5.0.3"
+  }
+}
