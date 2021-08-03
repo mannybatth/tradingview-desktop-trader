@@ -24,7 +24,6 @@ app.on('ready', async function () {
     defaultHeight: 700
   })
 
-  Menu.setApplicationMenu(null)
   mainWindow = new BrowserWindow({
     x: mainWindowStateKeeper.x,
     y: mainWindowStateKeeper.y,
@@ -36,21 +35,6 @@ app.on('ready', async function () {
   })
   // mainWindow.webContents.openDevTools();
   mainWindowStateKeeper.manage(mainWindow);
-
-  /* shortcut */
-  globalShortcut.register('F5', function () {
-    const w = BrowserWindow.getFocusedWindow()
-    if (w) {
-      w.reload()
-    }
-  })
-  globalShortcut.register('CommandOrControl+R', function () {
-    const w = BrowserWindow.getFocusedWindow()
-    if (w) {
-      w.reload()
-    }
-  })
-
 
   let windowSession = mainWindow.webContents.session
 
