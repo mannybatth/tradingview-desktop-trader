@@ -12,18 +12,28 @@ function fillDefaults() {
 }
 
 function onLongButtonClick() {
+  const isCrypto = $('div[class^="titleWrapper-"]').text().includes('BINANCE');
+
+  const json = isCrypto ? { "side": "long", "symbol": "{{ticker}}", "crypto": true } : { "side": "long", "symbol": "{{ticker}}" };
+  const jsonEscape = JSON.stringify(json).replace(/"/g, '\\"');
+
   fillDefaults();
   document.querySelector('input[name="alert-name"]').value = 'Long {{ticker}} triggered';
   document.querySelector('input[name="alert-name"]').dispatchEvent(new Event('input'));
-  document.querySelector('textarea[name="description"]').value = `{"content": "{\\"side\\": \\"long\\",\\"symbol\\": \\"{{ticker}}\\"}", "username": "Alert Bot"}`;
+  document.querySelector('textarea[name="description"]').value = `{"content": "${jsonEscape}", "username": "Alert Bot"}`;
   document.querySelector('textarea[name="description"]').dispatchEvent(new Event('input'));
 }
 
 function onShortButtonClick() {
+  const isCrypto = $('div[class^="titleWrapper-"]').text().includes('BINANCE');
+
+  const json = isCrypto ? { "side": "short", "symbol": "{{ticker}}", "crypto": true } : { "side": "short", "symbol": "{{ticker}}" };
+  const jsonEscape = JSON.stringify(json).replace(/"/g, '\\"');
+
   fillDefaults();
   document.querySelector('input[name="alert-name"]').value = 'Short {{ticker}} triggered';
   document.querySelector('input[name="alert-name"]').dispatchEvent(new Event('input'));
-  document.querySelector('textarea[name="description"]').value = `{"content": "{\\"side\\": \\"short\\",\\"symbol\\": \\"{{ticker}}\\"}", "username": "Alert Bot"}`;
+  document.querySelector('textarea[name="description"]').value = `{"content": "${jsonEscape}", "username": "Alert Bot"}`;
   document.querySelector('textarea[name="description"]').dispatchEvent(new Event('input'));
 }
 
