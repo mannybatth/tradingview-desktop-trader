@@ -612,8 +612,7 @@ function fillDefaults() {
   if (!webHookCheckbox.prop('checked')) {
     webHookCheckbox.click();
   }
-  document.querySelector('input[name="webhook-url"]').value = discordWebHook;
-  document.querySelector('input[name="webhook-url"]').dispatchEvent(new Event('input'));
+  setInputValue(document.querySelector('input[name="webhook-url"]'), discordWebHook);
 }
 
 function onLongButtonClick() {
@@ -623,10 +622,8 @@ function onLongButtonClick() {
   const jsonEscape = JSON.stringify(json).replace(/"/g, '\\"');
 
   fillDefaults();
-  document.querySelector('input[name="alert-name"]').value = 'Long {{ticker}} triggered';
-  document.querySelector('input[name="alert-name"]').dispatchEvent(new Event('input'));
-  document.querySelector('textarea[name="description"]').value = `{"content": "${jsonEscape}", "username": "Alert Bot"}`;
-  document.querySelector('textarea[name="description"]').dispatchEvent(new Event('input'));
+  setInputValue(document.querySelector('input[name="alert-name"]'), 'Long {{ticker}} triggered');
+  setInputValue(document.querySelector('textarea[name="description"]'), `{"content": "${jsonEscape}", "username": "Alert Bot"}`);
 }
 
 function onShortButtonClick() {
@@ -636,10 +633,8 @@ function onShortButtonClick() {
   const jsonEscape = JSON.stringify(json).replace(/"/g, '\\"');
 
   fillDefaults();
-  document.querySelector('input[name="alert-name"]').value = 'Short {{ticker}} triggered';
-  document.querySelector('input[name="alert-name"]').dispatchEvent(new Event('input'));
-  document.querySelector('textarea[name="description"]').value = `{"content": "${jsonEscape}", "username": "Alert Bot"}`;
-  document.querySelector('textarea[name="description"]').dispatchEvent(new Event('input'));
+  setInputValue(document.querySelector('input[name="alert-name"]'), 'Short {{ticker}} triggered');
+  setInputValue(document.querySelector('textarea[name="description"]'), `{"content": "${jsonEscape}", "username": "Alert Bot"}`);
 }
 
 const $container = $('<div style="margin-bottom: 15px;"></div>');
@@ -689,8 +684,15 @@ function setInputValue(input, value, isCheckBox) {
       input.dispatchEvent(new Event('click', { bubbles: true }));
     }
   } else {
-    nativeInputValueSetter.call(input, value);
-    input.dispatchEvent(new Event('input', { bubbles: true }));
+    try {
+      nativeInputValueSetter.call(input, value);
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    } catch (e) {
+      input.value = value;
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    }
   }
 }
 
