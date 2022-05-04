@@ -1,6 +1,5 @@
-console.log(`Content script loaded.`);
+console.log(`Patterns content script loaded.`);
 
-const discordWebHook = 'https://discord.com/api/webhooks/868580300530286624/QUpDy78u2_eV_6HcHxgzk-psPHm9w7cDPplZDbqmre36fnVvMCPSYjKL7zXzL3ePCsHc';
 const patternWebhookContent = {
   "New Pattern Found": {
     "Long": {
@@ -606,49 +605,6 @@ const patternWebhookContent = {
   }
 }
 
-
-function fillDefaults() {
-  const webHookCheckbox = $('input[name="webhook-toggle"]');
-  if (!webHookCheckbox.prop('checked')) {
-    webHookCheckbox.click();
-  }
-  setInputValue(document.querySelector('input[name="webhook-url"]'), discordWebHook);
-}
-
-function onLongButtonClick() {
-  const isCrypto = $('div[class^="titleWrapper-"]').text().includes('BINANCE');
-
-  const json = isCrypto ? { "side": "long", "symbol": "{{ticker}}", "crypto": true } : { "side": "long", "symbol": "{{ticker}}" };
-  const jsonEscape = JSON.stringify(json).replace(/"/g, '\\"');
-
-  fillDefaults();
-  setInputValue(document.querySelector('input[name="alert-name"]'), 'Long {{ticker}} triggered');
-  setInputValue(document.querySelector('textarea[name="description"]'), `{"content": "${jsonEscape}", "username": "Alert Bot"}`);
-}
-
-function onShortButtonClick() {
-  const isCrypto = $('div[class^="titleWrapper-"]').text().includes('BINANCE');
-
-  const json = isCrypto ? { "side": "short", "symbol": "{{ticker}}", "crypto": true } : { "side": "short", "symbol": "{{ticker}}" };
-  const jsonEscape = JSON.stringify(json).replace(/"/g, '\\"');
-
-  fillDefaults();
-  setInputValue(document.querySelector('input[name="alert-name"]'), 'Short {{ticker}} triggered');
-  setInputValue(document.querySelector('textarea[name="description"]'), `{"content": "${jsonEscape}", "username": "Alert Bot"}`);
-}
-
-const $container = $('<div style="margin-bottom: 15px;"></div>');
-const $longBtn = $('<div class="js-dialog__action-click js-dialog__no-drag tv-button tv-button--primary js-submit-button tv-button--loader"><span class="tv-button__text">Long</span><span class="tv-button__loader"><span class="tv-button__loader-item"></span><span class="tv-button__loader-item"></span><span class="tv-button__loader-item"></span></span></div>').click(onLongButtonClick);
-const $shortBtn = $('<div class="js-dialog__action-click js-dialog__no-drag tv-button tv-button--primary js-submit-button tv-button--loader"><span class="tv-button__text">Short</span><span class="tv-button__loader"><span class="tv-button__loader-item"></span><span class="tv-button__loader-item"></span><span class="tv-button__loader-item"></span></span></div>').click(onShortButtonClick);
-
-document.arrive(".js-alert-form", function () {
-
-  $container.append($longBtn);
-  $container.append($shortBtn);
-  $(".tv-control-fieldset").prepend($container);
-
-});
-
 function onDefaultsBtnClick() {
 
   const cellsObject = $('div[data-dialog-name="HPPu02"] div[class^="content-"] input').parents('div[class^=cell-]')
@@ -675,33 +631,12 @@ function onDefaultsBtnClick() {
   });
 }
 
-const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
-const nativeInputCheckedSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "checked").set;
-function setInputValue(input, value, isCheckBox) {
-  if (isCheckBox) {
-    if (input.value !== value) {
-      nativeInputCheckedSetter.call(input, value);
-      input.dispatchEvent(new Event('click', { bubbles: true }));
-    }
-  } else {
-    try {
-      nativeInputValueSetter.call(input, value);
-      input.dispatchEvent(new Event('input', { bubbles: true }));
-      input.dispatchEvent(new Event('change', { bubbles: true }));
-    } catch (e) {
-      input.value = value;
-      input.dispatchEvent(new Event('input', { bubbles: true }));
-      input.dispatchEvent(new Event('change', { bubbles: true }));
-    }
-  }
-}
-
-const $container2 = $('<div style="margin-bottom: 15px;"></div>');
+const $container = $('<div style="margin-bottom: 15px;"></div>');
 const $setDefaultsBtn = $('<div class="js-dialog__action-click js-dialog__no-drag tv-button tv-button--primary js-submit-button tv-button--loader"><span class="tv-button__text">Set Defaults</span><span class="tv-button__loader"><span class="tv-button__loader-item"></span><span class="tv-button__loader-item"></span><span class="tv-button__loader-item"></span></span></div>').click(onDefaultsBtnClick);
 
 document.arrive('div[data-dialog-name="HPPu02"]', function () {
 
-  $container2.append($setDefaultsBtn);
-  $('div[data-dialog-name="HPPu02"] div[class^="content-"]').prepend($container2);
+  $container.append($setDefaultsBtn);
+  $('div[data-dialog-name="HPPu02"] div[class^="content-"]').prepend($container);
 
 });
