@@ -2,11 +2,11 @@ const { app, BrowserWindow, Menu, globalShortcut, dialog, net, session } = requi
 const windowStateKeeper = require("electron-window-state")
 const path = require("path");
 const log = require('electron-log');
-const isDev = require('electron-is-dev')
+
+let mainWindow = null
 
 let update_check_url = 'https://api.github.com/repos/unknown-marketwizards/tradingview-desktop/releases/latest'
 const pkg = require("./package.json")
-let mainWindow = null
 
 /* block trial-notification, ads */
 const filter = {
@@ -19,6 +19,9 @@ const filter = {
 let extensionId = null;
 
 app.on('ready', async function () {
+  const isDevModule = await import('electron-is-dev');
+  const isDev = isDevModule.default;
+
   let mainWindowStateKeeper = windowStateKeeper({
     defaultWidth: 1024,
     defaultHeight: 700
