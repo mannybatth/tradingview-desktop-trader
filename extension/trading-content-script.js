@@ -2,44 +2,61 @@ console.log(`Content script loaded.`);
 
 const discordWebHook = 'https://discord.com/api/webhooks/868580300530286624/QUpDy78u2_eV_6HcHxgzk-psPHm9w7cDPplZDbqmre36fnVvMCPSYjKL7zXzL3ePCsHc';
 
-function fillDefaults() {
-  const webHookCheckbox = $('input[name="webhook-toggle"]');
-  if (!webHookCheckbox.prop('checked')) {
-    webHookCheckbox.click();
+async function fillWebhookUrl() {
+  // Click id=alert-dialog-tabs__notifications
+  document.querySelector('button[id="alert-dialog-tabs__notifications"]').click();
+
+  // Enable checkbox input[data-name="webhook"] if its not enabled
+  const webhookCheckbox = document.querySelector('input[data-name="webhook"]');
+  if (!webhookCheckbox.checked) {
+    setInputValue(webhookCheckbox, true, true);
   }
-  setInputValue(document.querySelector('input[name="webhook-url"]'), discordWebHook);
+
+  await sleep(200);
+
+  // Fill input[name="webhook-url"]
+  const webhookUrlInput = document.querySelector('input[id="webhook-url"]');
+  setInputValue(webhookUrlInput, discordWebHook);
 }
 
 function onLongButtonClick() {
-  const isCrypto = $('div[class^="titleWrapper-"]').text().includes('BINANCE');
+  // const isCrypto = $('div[class^="titlesWrapper-"]').text().includes('BINANCE');
+  const isCrypto = false;
 
-  const json = isCrypto ? { "side": "long", "symbol": "{{ticker}}", "crypto": true } : { "side": "long", "symbol": "{{ticker}}" };
+  const json = isCrypto ? { "side": "long", "symbol": "{{ticker}}", "crypto": true } : { "type": "call", "symbol": "{{ticker}}" };
   const jsonEscape = JSON.stringify(json).replace(/"/g, '\\"');
 
-  fillDefaults();
-  setInputValue(document.querySelector('input[name="alert-name"]'), 'Long {{ticker}} triggered');
-  setInputValue(document.querySelector('textarea[name="description"]'), `{"content": "${jsonEscape}", "username": "Alert Bot"}`);
+  setInputValue(document.querySelector('input[id="alert-name"]'), 'Long {{ticker}} triggered');
+  setInputValue(document.querySelector('textarea[id="alert-message"]'), `{"content": "${jsonEscape}", "username": "Alert Bot"}`);
+  fillWebhookUrl();
 }
 
 function onShortButtonClick() {
-  const isCrypto = $('div[class^="titleWrapper-"]').text().includes('BINANCE');
+  // const isCrypto = $('div[class^="titlesWrapper-"]').text().includes('BINANCE');
+  const isCrypto = false;
 
-  const json = isCrypto ? { "side": "short", "symbol": "{{ticker}}", "crypto": true } : { "side": "short", "symbol": "{{ticker}}" };
+  const json = isCrypto ? { "side": "short", "symbol": "{{ticker}}", "crypto": true } : { "type": "put", "symbol": "{{ticker}}" };
   const jsonEscape = JSON.stringify(json).replace(/"/g, '\\"');
 
-  fillDefaults();
-  setInputValue(document.querySelector('input[name="alert-name"]'), 'Short {{ticker}} triggered');
-  setInputValue(document.querySelector('textarea[name="description"]'), `{"content": "${jsonEscape}", "username": "Alert Bot"}`);
+  setInputValue(document.querySelector('input[id="alert-name"]'), 'Short {{ticker}} triggered');
+  setInputValue(document.querySelector('textarea[id="alert-message"]'), `{"content": "${jsonEscape}", "username": "Alert Bot"}`);
+  fillWebhookUrl();
 }
 
-const $tdContainer = $('<div style="margin-bottom: 15px;"></div>');
-const $longBtn = $('<div class="js-dialog__action-click js-dialog__no-drag tv-button tv-button--primary js-submit-button tv-button--loader"><span class="tv-button__text">Long</span><span class="tv-button__loader"><span class="tv-button__loader-item"></span><span class="tv-button__loader-item"></span><span class="tv-button__loader-item"></span></span></div>').click(onLongButtonClick);
-const $shortBtn = $('<div class="js-dialog__action-click js-dialog__no-drag tv-button tv-button--primary js-submit-button tv-button--loader"><span class="tv-button__text">Short</span><span class="tv-button__loader"><span class="tv-button__loader-item"></span><span class="tv-button__loader-item"></span><span class="tv-button__loader-item"></span></span></div>').click(onShortButtonClick);
+const $tdContainer = $('<div style=""></div>');
+const $longBtn = $(
+  '<button type="submit" style="margin-left: 0px;" data-name="submit" class="submitBtn-RHTYtJvz button-D4RPB3ZC small-D4RPB3ZC green-D4RPB3ZC primary-D4RPB3ZC apply-overflow-tooltip apply-overflow-tooltip--check-children-recursively apply-overflow-tooltip--allow-text apply-common-tooltip" data-overflow-tooltip-text="Long "><span class="content-D4RPB3ZC">Long</span></button>'
+).click(onLongButtonClick);
+const $shortBtn = $(
+  '<button type="submit" data-name="submit" class="submitBtn-RHTYtJvz button-D4RPB3ZC small-D4RPB3ZC red-D4RPB3ZC primary-D4RPB3ZC apply-overflow-tooltip apply-overflow-tooltip--check-children-recursively apply-overflow-tooltip--allow-text apply-common-tooltip" data-overflow-tooltip-text="Short "><span class="content-D4RPB3ZC">Short</span></button>'
+).click(onShortButtonClick);
 
-document.arrive(".js-alert-form", function () {
+document.arrive('div[data-name="alerts-create-edit-dialog"]', function () {
+
+  console.log('Dialog arrived.');
 
   $tdContainer.append($longBtn);
   $tdContainer.append($shortBtn);
-  $(".tv-control-fieldset").prepend($tdContainer);
+  $('div[data-name="alerts-create-edit-dialog"] div[class^="buttons-"]').prepend($tdContainer);
 
 });

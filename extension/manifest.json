@@ -14,7 +14,6 @@
         "libs/jquery-3.6.0.slim.min.js",
         "libs/arrive.min.js",
         "helpers.js",
-        "patterns-content-script.js",
         "trading-content-script.js"
       ],
       "all_frames": false

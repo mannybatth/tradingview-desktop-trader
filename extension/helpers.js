@@ -2,9 +2,10 @@ const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputE
 const nativeInputCheckedSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "checked").set;
 function setInputValue(input, value, isCheckBox) {
   if (isCheckBox) {
-    if (input.value !== value) {
+    if (input.checked !== value) {
       nativeInputCheckedSetter.call(input, value);
       input.dispatchEvent(new Event('click', { bubbles: true }));
+      input.dispatchEvent(new Event('change', { bubbles: true }));
     }
   } else {
     try {
@@ -17,4 +18,8 @@ function setInputValue(input, value, isCheckBox) {
       input.dispatchEvent(new Event('change', { bubbles: true }));
     }
   }
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
