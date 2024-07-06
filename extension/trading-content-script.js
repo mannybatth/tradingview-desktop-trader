@@ -48,7 +48,7 @@ const $longBtn = $(
   '<button type="submit" style="margin-left: 0px;" data-name="submit" class="submitBtn-RHTYtJvz button-D4RPB3ZC small-D4RPB3ZC green-D4RPB3ZC primary-D4RPB3ZC apply-overflow-tooltip apply-overflow-tooltip--check-children-recursively apply-overflow-tooltip--allow-text apply-common-tooltip" data-overflow-tooltip-text="Long "><span class="content-D4RPB3ZC">Long</span></button>'
 ).click(onLongButtonClick);
 const $shortBtn = $(
-  '<button type="submit" data-name="submit" class="submitBtn-RHTYtJvz button-D4RPB3ZC small-D4RPB3ZC red-D4RPB3ZC primary-D4RPB3ZC apply-overflow-tooltip apply-overflow-tooltip--check-children-recursively apply-overflow-tooltip--allow-text apply-common-tooltip" data-overflow-tooltip-text="Short "><span class="content-D4RPB3ZC">Short</span></button>'
+  '<button type="submit" style="margin-right: 12px;" data-name="submit" class="submitBtn-RHTYtJvz button-D4RPB3ZC small-D4RPB3ZC red-D4RPB3ZC primary-D4RPB3ZC apply-overflow-tooltip apply-overflow-tooltip--check-children-recursively apply-overflow-tooltip--allow-text apply-common-tooltip" data-overflow-tooltip-text="Short "><span class="content-D4RPB3ZC">Short</span></button>'
 ).click(onShortButtonClick);
 
 document.arrive('div[data-name="alerts-create-edit-dialog"]', function () {
